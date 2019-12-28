@@ -30,8 +30,6 @@ if(isset($_POST['adddir'])){
 
 	<div class="filemanager">
 
-		<div class="breadcrumbs"></div>
-
 		<ul class="data"></ul>
 
 		<div class="nothingfound">

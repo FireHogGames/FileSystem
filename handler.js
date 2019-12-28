@@ -1,7 +1,6 @@
 $(function(){
 
 	var filemanager = $('.filemanager'),
-		breadcrumbs = $('.breadcrumbs'),
 		fileList = filemanager.find('.data');
 
 	// Start by fetching the file data from scan.php with an AJAX request
@@ -27,75 +26,6 @@ $(function(){
 
 		}).trigger('hashchange');
 
-
-		// Hiding and showing the search box
-
-		filemanager.find('.search').click(function(){
-
-			var search = $(this);
-
-			search.find('span').hide();
-			search.find('input[type=search]').show().focus();
-
-		});
-
-
-		// Listening for keyboard input on the search field.
-		// We are using the "input" event which detects cut and paste
-		// in addition to keyboard input.
-
-		filemanager.find('input').on('input', function(e){
-
-			folders = [];
-			files = [];
-
-			var value = this.value.trim();
-
-			if(value.length) {
-
-				filemanager.addClass('searching');
-
-				// Update the hash on every key stroke
-				window.location.hash = 'search=' + value.trim();
-
-			}
-
-			else {
-
-				filemanager.removeClass('searching');
-				window.location.hash = encodeURIComponent(currentPath);
-
-			}
-
-		}).on('keyup', function(e){
-
-			// Clicking 'ESC' button triggers focusout and cancels the search
-
-			var search = $(this);
-
-			if(e.keyCode == 27) {
-
-				search.trigger('focusout');
-
-			}
-
-		}).focusout(function(e){
-
-			// Cancel the search
-
-			var search = $(this);
-
-			if(!search.val().trim().length) {
-
-				window.location.hash = encodeURIComponent(currentPath);
-				search.hide();
-				search.parent().find('span').show();
-
-			}
-
-		});
-
-
 		// Clicking on folders
 
 		fileList.on('click', 'li.folders', function(e){
@@ -119,21 +49,6 @@ $(function(){
 
 			window.location.hash = encodeURIComponent(nextDir);
 			currentPath = nextDir;
-		});
-
-
-		// Clicking on breadcrumbs
-
-		breadcrumbs.on('click', 'a', function(e){
-			e.preventDefault();
-
-			var index = breadcrumbs.find('a').index($(this)),
-				nextDir = breadcrumbsUrls[index];
-
-			breadcrumbsUrls.length = Number(index);
-
-			window.location.hash = encodeURIComponent(nextDir);
-
 		});
 
 
@@ -227,29 +142,6 @@ $(function(){
 		}
 
 
-		// Recursively search through the file tree
-
-		function searchData(data, searchTerms) {
-
-			data.forEach(function(d){
-				if(d.type === 'folder') {
-
-					searchData(d.items,searchTerms);
-
-					if(d.name.toLowerCase().match(searchTerms)) {
-						folders.push(d);
-					}
-				}
-				else if(d.type === 'file') {
-					if(d.name.toLowerCase().match(searchTerms)) {
-						files.push(d);
-					}
-				}
-			});
-			return {folders: folders, files: files};
-		}
-
-
 		// Render the HTML for the file manager
 
 		function render(data) {
@@ -295,12 +187,7 @@ $(function(){
 				scannedFolders.forEach(function(f) {
 
 					var itemsLength = f.items.length,
-						name = escapeHTML(f.name),
-						icon = '<span class="icon folder"></span>';
-
-					if(itemsLength) {
-						icon = '<span class="icon folder full"></span>';
-					}
+						name = escapeHTML(f.name);
 
 					if(itemsLength == 1) {
 						itemsLength += ' item';
@@ -312,7 +199,7 @@ $(function(){
 						itemsLength = 'Empty';
 					}
 
-					var folder = $('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders">'+icon+'<span class="name">' + name + '</span> <span class="details">' + itemsLength + '</span></a></li>');
+					var folder = $('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders"><span class="name">' + name + '</span> <span class="details">' + itemsLength + '</span></a></li>');
 					folder.appendTo(fileList);
 				});
 
@@ -336,41 +223,6 @@ $(function(){
 				});
 
 			}
-
-
-			// Generate the breadcrumbs
-
-			var url = '';
-
-			if(filemanager.hasClass('searching')){
-
-				url = '<span>Search results: </span>';
-				fileList.removeClass('animated');
-
-			}
-			else {
-
-				fileList.addClass('animated');
-
-				breadcrumbsUrls.forEach(function (u, i) {
-
-					var name = u.split('/');
-
-					if (i !== breadcrumbsUrls.length - 1) {
-						url += '<a href="'+u+'"><span class="folderName">' + name[name.length-1] + '</span></a> <span class="arrow">→</span> ';
-					}
-					else {
-						url += '<span class="folderName">' + name[name.length-1] + '</span>';
-					}
-
-				});
-
-			}
-
-			breadcrumbs.text('').append(url);
-
-
-			// Show the generated elements
 
 			fileList.animate({'display':'inline-block'});
 

@@ -62,7 +62,7 @@ function scan($dir){
 header('Content-type: application/json');
 
 echo json_encode(array(
-	"name" => "root",
+	"name" => "files",
 	"type" => "folder",
 	"path" => $dir,
 	"items" => $response

@@ -3,7 +3,7 @@
 class userdata{
 
 	public static function GetDir(){
-		$dir = "root/user".userdata::GetId();
+		$dir = "files/user".userdata::GetId();
 		return $dir;
 	}
 
