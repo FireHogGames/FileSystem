@@ -13,6 +13,8 @@ $response = scan($dir);
 
 function scan($dir){
 
+
+
 	$files = array();
 
 	// Is there actually such a folder/file?
@@ -67,3 +69,4 @@ echo json_encode(array(
 	"path" => $dir,
 	"items" => $response
 ));
+?>

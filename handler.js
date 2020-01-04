@@ -1,7 +1,8 @@
 $(function(){
 
 	var filemanager = $('.filemanager'),
-		fileList = filemanager.find('.data');
+		fileList = filemanager.find('.data'),
+		backbutton = $('.backbutton');
 
 	// Start by fetching the file data from scan.php with an AJAX request
 
@@ -33,24 +34,31 @@ $(function(){
 
 			var nextDir = $(this).find('a.folders').attr('href');
 
-			if(filemanager.hasClass('searching')) {
+			window.location.hash = nextDir;
 
-				// Building the breadcrumbs
-
-				breadcrumbsUrls = generateBreadcrumbs(nextDir);
-
-				filemanager.removeClass('searching');
-				filemanager.find('input[type=search]').val('').hide();
-				filemanager.find('span').show();
-			}
-			else {
-				breadcrumbsUrls.push(nextDir);
-			}
-
-			window.location.hash = encodeURIComponent(nextDir);
+			document.cookie="CP="+currentPath;
 			currentPath = nextDir;
+			//pass the path off the directory we clicked into a cookie for transfering to php file to make sure we can use it to add/move files and folders to the correct directories.
+			//NOTE: The cookie content of this is not encrypted or anything because it is just a path to a file
+			document.cookie="CD="+nextDir;
+
+			location.reload();
 		});
 
+
+		backbutton.on('click', 'li.backbutt', function(s){
+			s.preventDefault();
+
+			var lastdir = $(this).find('a.button').attr('href');
+
+			window.location.hash = lastdir;
+			currentPath = lastdir;
+			//pass the path off the directory we clicked into a cookie for transfering to php file to make sure we can use it to add/move files and folders to the correct directories.
+			//NOTE: The cookie content of this is not encrypted or anything because it is just a path to a file
+			document.cookie="CD="+lastdir;	
+
+		});
+		
 
 		// Navigates to the given hash (path)
 
@@ -216,9 +224,7 @@ $(function(){
 
 					fileType = fileType[fileType.length-1];
 
-					icon = '<span class="icon file f-'+fileType+'">.'+fileType+'</span>';
-
-					var file = $('<li class="files"><a href="'+ f.path+'" title="'+ f.path +'" class="files">'+icon+'<span class="name">'+ name +'</span> <span class="details">'+fileSize+'</span></a></li>');
+					var file = $('<li class="files"><a href="'+ f.path+'" title="'+ f.path +'" class="files"><span class="name">'+ name +'</span> <span class="details">'+fileSize+'</span></a></li>');
 					file.appendTo(fileList);
 				});
 

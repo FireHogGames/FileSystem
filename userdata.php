@@ -7,6 +7,10 @@ class userdata{
 		return $dir;
 	}
 
+	public static function getCurrentDir(){
+		echo $_GET['#files'];
+	}
+
 	public static function GetId(){
 		//Put DB query here to get the user id.
 		$user_id = 1;
