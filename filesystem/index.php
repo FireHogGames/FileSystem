@@ -1,7 +1,7 @@
 <?php
 
-include('FileSystem.php');
-include('userdata.php');
+include('resources/php/functions/FileSystem.php');
+include('resources/php/functions/userdata.php');
 
 if(!isset($_COOKIE['CD']) || !isset($_COOKIE['CP'])){
 	setcookie('CD', userdata::GetDir());
@@ -44,16 +44,13 @@ if(isset($_POST['addfile'])){
 		<input type="submit" name="addfile" value="Add file">
 	</form>
 
-	<div class="breadcrumbs"></div>
-
 	<div class="filemanager">
 
 		<ul class="backbutton">
 			<li class="backbutt"><a href=<?php if(isset($_COOKIE['CP'])) echo $_COOKIE['CP']; ?> title=<?php if(isset($_COOKIE['CP'])) echo $_COOKIE['CP']; ?> class="button"><span class="name">Back</span></a></li>
 		</ul>
 
-		<ul class="data">
-		</ul>
+		<ul class="data"></ul>
 
 		<div class="nothingfound">
 			<div class="nofiles"></div>
@@ -62,8 +59,8 @@ if(isset($_POST['addfile'])){
 	</div>
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script src="handler.js"></script>
-	<script src="js/Utils.js"></script>
+	<script src="resources/js/filemanager/handler.js"></script>
+	<script src="resources/js/filemanager/Utils.js"></script>
 
 </body>
 </html>

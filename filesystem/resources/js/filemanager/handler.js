@@ -6,7 +6,7 @@ $(function(){
 
 	// Start by fetching the file data from scan.php with an AJAX request
 
-	$.get('scan.php', function(data) {
+	$.get("resources/php/functions/scan.php", function(data) {
 
 		var response = [data],
 			currentPath = '',
@@ -34,7 +34,7 @@ $(function(){
 
 			var nextDir = $(this).find('a.folders').attr('href');
 
-			window.location.hash = nextDir;
+			window.location.hash = encodeURIComponent(nextDir);
 
 			document.cookie="CP="+currentPath;
 			currentPath = nextDir;
@@ -51,7 +51,7 @@ $(function(){
 
 			var lastdir = $(this).find('a.button').attr('href');
 
-			window.location.hash = lastdir;
+			window.location.hash = encodeURIComponent(lastdir);
 			currentPath = lastdir;
 			//pass the path off the directory we clicked into a cookie for transfering to php file to make sure we can use it to add/move files and folders to the correct directories.
 			//NOTE: The cookie content of this is not encrypted or anything because it is just a path to a file
@@ -207,7 +207,7 @@ $(function(){
 						itemsLength = 'Empty';
 					}
 
-					var folder = $('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders"><span class="name">' + name + '</span> <span class="details">' + itemsLength + '</span></a></li>');
+					var folder = $('<li class="folders"><a href="'+ f.path +'" title="'+ f.path +'" class="folders"><span class="name">' + name + '</span> - <span class="details">' + itemsLength + '</span></a></li>');
 					folder.appendTo(fileList);
 				});
 
@@ -224,7 +224,7 @@ $(function(){
 
 					fileType = fileType[fileType.length-1];
 
-					var file = $('<li class="files"><a href="'+ f.path+'" title="'+ f.path +'" class="files"><span class="name">'+ name +'</span> <span class="details">'+fileSize+'</span></a></li>');
+					var file = $('<li class="files"><a href="'+ f.path+'" title="'+ f.path +'" class="files"><span class="name">'+ name +'</span> - <span class="details">'+fileSize+'</span></a></li>');
 					file.appendTo(fileList);
 				});
 
